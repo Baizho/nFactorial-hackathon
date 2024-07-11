@@ -176,7 +176,7 @@ class UserController {
         // Update the sheet with the new data
         await sheets.spreadsheets.values.update({
           spreadsheetId,
-          range: `users!A1:Z${rows.length}`, // Adjust range to cover all rows
+          range: `users!A1:AA${rows.length}`, // Adjust range to cover all rows
           valueInputOption: 'RAW',
           resource: {
             values: rows,
@@ -237,7 +237,7 @@ class UserController {
         // Update the sheet with the new data
         await sheets.spreadsheets.values.update({
           spreadsheetId,
-          range: `users!A1:Z${rows.length}`, // Adjust range to cover all rows
+          range: `users!A1:AA${rows.length}`, // Adjust range to cover all rows
           valueInputOption: 'RAW',
           resource: {
             values: rows,
@@ -343,7 +343,7 @@ class UserController {
         // Update the sheet with the new data
         await sheets.spreadsheets.values.update({
           spreadsheetId,
-          range: `users!A1:Z${rows.length}`, // Adjust range to cover all rows
+          range: `users!A1:AA${rows.length}`, // Adjust range to cover all rows
           valueInputOption: 'RAW',
           resource: {
             values: rows,
