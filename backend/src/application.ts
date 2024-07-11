@@ -29,6 +29,7 @@ export default interface User {
     needAccommodationInAlmaty: boolean;
     representativeGroups: string[];
     isApprovedByAI: string;
+    commentsByAI: string;
     task: string;
     taskResponse: string;
 }

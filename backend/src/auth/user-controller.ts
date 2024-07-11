@@ -14,7 +14,7 @@ const path = require('path');
 // Create an authorized client.
 const auth = new google.auth.GoogleAuth({
   credentials: serviceAccount,
-  scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
 // Specify the spreadsheet ID and range.
@@ -128,6 +128,56 @@ class UserController {
       const user = await getUserByEmailService(email);
       console.log(user);
       const feedback = await checkUserApplication(user);
+
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: 'v4', auth: client });
+
+      try {
+        // Read the existing data
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: 'users', // Fetch all data from the sheet
+        });
+
+        const rows = response.data.values;
+        if (!rows.length) {
+          console.log('No data found.');
+          return;
+        }
+
+        // Find the index of the row with the matching email
+        const headers = rows[0];
+        const emailIndex = headers.indexOf('email');
+        const decisionIndex = headers.indexOf('isApprovedByAI');
+
+        // If decision column does not exist, add it
+        if (decisionIndex === -1) {
+          headers.push('isApprovedByAI');
+        }
+
+        const rowIndex = rows.findIndex(row => row[emailIndex] === email);
+        if (rowIndex === -1) {
+          console.log('No user found with that email.');
+          return;
+        }
+
+        // Update the decision column
+        rows[rowIndex][decisionIndex === -1 ? headers.length - 1 : decisionIndex] = feedback.Decision;
+
+        // Update the sheet with the new data
+        await sheets.spreadsheets.values.update({
+          spreadsheetId,
+          range: `users!A1:Z${rows.length}`, // Adjust range to cover all rows
+          valueInputOption: 'RAW',
+          resource: {
+            values: rows,
+          },
+        });
+
+        console.log('User decision updated successfully.');
+      } catch (error) {
+        console.error('Error updating user decision:', error);
+      }
       res.status(201).json(feedback);
     } catch (err: any) {
       res.status(500).json({ error: "error checking user application" });
