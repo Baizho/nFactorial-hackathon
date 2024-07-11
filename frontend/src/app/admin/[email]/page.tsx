@@ -45,6 +45,7 @@ const userApplication = (props: Props) => {
                 </div>
             </div>
             <div className="grid gap-2">
+                <div className='text-lg text-black font-bold'>Round 1</div>
                 <div className="grid gap-2 text-muted-foreground">
                     <div>
                         <span className="font-medium">Approval Status: </span>
@@ -114,31 +115,6 @@ const userApplication = (props: Props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-y-4">
-                        <h2 className="text-lg font-semibold">Programming Skills &amp; Experience</h2>
-                        <div className="grid gap-y-3 text-muted-foreground">
-                            <div>
-                                <span className="font-medium">Skill Level: </span>
-                                <span>{user.programmingSkillLevel}</span>
-                            </div>
-                            <div>
-                                <span className="font-medium">Programming Experience Description: </span>
-                                <span>{user.programmingExperienceDescription}</span>
-                            </div>
-                            <div>
-                                <span className="font-medium">Past Projects: </span>
-                                <span>
-                                    {user.pastProgrammingProjects}
-                                </span>
-                            </div>
-                            <div>
-                                <span className="font-medium">Best Achievements: </span>
-                                <span>
-                                    {user.bestAchievements}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div className="grid gap-6">
                     <div className="flex flex-col gap-y-3">
@@ -177,30 +153,30 @@ const userApplication = (props: Props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="grid gap-2">
-                        <h2 className="text-lg font-semibold">Tasks</h2>
-                        <div className="grid gap-4 text-muted-foreground">
-                            <div>
-                                <span className="font-medium">Task 1: </span>
-                                <span>Develop a prototype for an AI-powered business process automation tool.</span>
-                                <p>
-                                    John's response: I've developed a prototype for an AI-powered business process automation tool that
-                                    can help streamline common business tasks like invoice processing, employee onboarding, and customer
-                                    support. The tool uses natural language processing and machine learning to automate repetitive tasks,
-                                    freeing up employees to focus on more strategic work.
-                                </p>
-                            </div>
-                            <div>
-                                <span className="font-medium">Task 2: </span>
-                                <span>Analyze the potential impact of AI on the future of work.</span>
-                                <p>
-                                    John's response: AI will have a significant impact on the future of work, both in terms of job
-                                    displacement and the creation of new job opportunities. While AI will automate many routine tasks, it
-                                    will also enable the development of new products and services that will create new jobs. The key will
-                                    be to ensure that workers are equipped with the necessary skills to adapt to the changing job market.
-                                </p>
-                            </div>
-                        </div>
+                </div>
+            </div>
+            <div className="flex flex-col gap-y-4 w-full mt-5">
+                <h2 className="text-lg font-semibold">Programming Skills &amp; Experience</h2>
+                <div className="grid gap-y-3 text-muted-foreground">
+                    <div>
+                        <span className="font-medium">Skill Level: </span>
+                        <span>{user.programmingSkillLevel}</span>
+                    </div>
+                    <div>
+                        <span className="font-medium">Programming Experience Description: </span>
+                        <span>{user.programmingExperienceDescription}</span>
+                    </div>
+                    <div>
+                        <span className="font-medium">Past Projects: </span>
+                        <span>
+                            {user.pastProgrammingProjects}
+                        </span>
+                    </div>
+                    <div>
+                        <span className="font-medium">Best Achievements: </span>
+                        <span>
+                            {user.bestAchievements}
+                        </span>
                     </div>
                 </div>
             </div>
