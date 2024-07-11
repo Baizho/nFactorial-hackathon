@@ -24,6 +24,7 @@ class UserController {
   async getUserByEmail(req: Request, res: Response) {
     const { email } = req.body;
     const range = "users"; // Adjust the range as needed.
+    console.log("getting users");
     try {
       const client = await auth.getClient();
       const sheets = google.sheets({ version: 'v4', auth: client });
