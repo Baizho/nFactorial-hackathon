@@ -9,14 +9,14 @@ export default function AuthenticateUser({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const { authenticateUser } = useUser();
-    useEffect(() => {
-        if (window === undefined) return;
-        const userId = window.localStorage.getItem("impact-userId");
-        if (userId !== null) {
-            authenticateUser(userId);
-        }
-    }, [])
+    // const { authenticateUser } = useUser();
+    // useEffect(() => {
+    //     if (window === undefined) return;
+    //     const userId = window.localStorage.getItem("impact-userId");
+    //     if (userId !== null) {
+    //         authenticateUser(userId);
+    //     }
+    // }, [])
     return (
         <>{children}</>
     )
