@@ -15,29 +15,29 @@ const Header = (props: Props) => {
     return (
         <header className="bg-white text-black py-4 px-6 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2" prefetch={false}>
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_XCjvUbql2PGh76wU3T8WHu4FpzNDLssHw&s" alt="" className='ml-2 w-10'/>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_XCjvUbql2PGh76wU3T8WHu4FpzNDLssHw&s" alt="" className='ml-2 w-10' />
             </Link>
             <nav className="flex items-center gap-4">
-               
-                {user.id ? (
+
+                {user.email ? (
                     <>
- <Link href="/courses" className="hover:text-rose-500" prefetch={false}>
-                    Assigned Tasks
-                </Link>
+                        <Link href="/courses" className="hover:text-rose-500" prefetch={false}>
+                            Assigned Tasks
+                        </Link>
                     </>
                 ) : (
                     <>
-                        
+
                     </>
                 )}
-                {user.id ? (
+                {user.email ? (
                     <>
                         <Link href="/profile" className="flex items-center gap-2" prefetch={false}>
                             <Avatar className="h-8 w-8">
                                 <AvatarImage src="/placeholder-user.jpg" />
                                 <AvatarFallback>JD</AvatarFallback>
                             </Avatar>
-                            <span className="hidden md:inline">{user.name} {user.surname}</span>
+                            <span className="hidden md:inline">{user.fullName}</span>
                         </Link>
                     </>
                 ) : (
