@@ -149,11 +149,8 @@ class UserController {
         const headers = rows[0];
         const emailIndex = headers.indexOf('email');
         const decisionIndex = headers.indexOf('isApprovedByAI');
+        const commentIndex = headers.indexOf('commentsByAI');
 
-        // If decision column does not exist, add it
-        if (decisionIndex === -1) {
-          headers.push('isApprovedByAI');
-        }
 
         const rowIndex = rows.findIndex(row => row[emailIndex] === email);
         if (rowIndex === -1) {
@@ -161,8 +158,20 @@ class UserController {
           return;
         }
 
+        // If decision column does not exist, add it
+        if (decisionIndex === -1) {
+          headers.push('isApprovedByAI');
+        }
+
+
         // Update the decision column
         rows[rowIndex][decisionIndex === -1 ? headers.length - 1 : decisionIndex] = feedback.Decision;
+
+        // If comment column does not exist, add it
+        if (commentIndex === -1) {
+          headers.push('commentsByAI');
+        }
+        rows[rowIndex][commentIndex === -1 ? headers.length - 1 : commentIndex] = feedback.Comments;
 
         // Update the sheet with the new data
         await sheets.spreadsheets.values.update({
@@ -182,6 +191,10 @@ class UserController {
     } catch (err: any) {
       res.status(500).json({ error: "error checking user application" });
     }
+  }
+
+  async assignTask(req: Request, res: Response) {
+
   }
 }
 
