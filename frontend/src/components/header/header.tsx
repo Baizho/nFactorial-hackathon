@@ -15,18 +15,21 @@ const Header = (props: Props) => {
     return (
         <header className="bg-white text-black py-4 px-6 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2" prefetch={false}>
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP3H0F3rEt_ycWnYwU7TXgGCsHvW6JdNyT5w&s" alt="" className='w-20'/>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_XCjvUbql2PGh76wU3T8WHu4FpzNDLssHw&s" alt="" className='ml-2 w-10'/>
             </Link>
             <nav className="flex items-center gap-4">
-                <Link href="/courses" className="hover:text-rose-500" prefetch={false}>
-                    Courses
+               
+                {user.id ? (
+                    <>
+ <Link href="/courses" className="hover:text-rose-500" prefetch={false}>
+                    Assigned Tasks
                 </Link>
-                <Link href="/mentors" className="hover:text-rose-500" prefetch={false}>
-                    Book a Mentor
-                </Link>
-                <Link href="/gpt" className="hover:text-rose-500" prefetch={false}>
-                    AI Consultant
-                </Link>
+                    </>
+                ) : (
+                    <>
+                        
+                    </>
+                )}
                 {user.id ? (
                     <>
                         <Link href="/profile" className="flex items-center gap-2" prefetch={false}>
@@ -39,8 +42,7 @@ const Header = (props: Props) => {
                     </>
                 ) : (
                     <>
-                        <Link href="/register"><Button variant="secondary">Sign Up</Button></Link>
-                        <Link href="/login"><Button variant="default">Log In</Button></Link>
+                        <Link href="/login"><Button variant="default">Логин</Button></Link>
                     </>
                 )}
             </nav>
