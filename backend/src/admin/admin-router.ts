@@ -5,7 +5,7 @@ import adminController from './admin-controller';
 const adminRouter = Router();
 
 adminRouter.get('/user/all', adminMiddleware, adminController.getAllUsers);
-adminRouter.get('/userByEmail', adminMiddleware, adminController.getUserByEmail);
+adminRouter.post('/userByEmail', adminMiddleware, adminController.getUserByEmail);
 adminRouter.get('/admin/check', adminMiddleware, adminController.check);
 
 export default adminRouter;
