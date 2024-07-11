@@ -69,6 +69,27 @@ const userApplication = (props: Props) => {
                         </span>
                     </div>
                 </div>
+                {user.isApprovedByAI === "yes" && (
+                    <>
+                        <div className='text-lg text-black font-bold'>Round 2</div>
+                        <div className="grid gap-2 text-muted-foreground">
+                            <div>
+                                <span className="font-medium">Task Response Status: </span>
+                                {!user.task && <span className='text-yellow-500 font-bold text-lg'>Awaiting to receive a task</span>}
+                                {user.task && user.taskResponse && <span className='text-green-500 font-bold text-lg'>Task Sent</span>}
+                                {user.task && !user.taskResponse && <span className='text-red-500 font-bold text-lg'>Awaiting task submission</span>}
+                            </div>
+                            <div>
+                                <span className="font-medium">Task Link: </span>
+                                <span className='text-black font-semibold'>{user.task}</span>
+                            </div>
+                            <div>
+                                <span className="font-medium">Task response Github Link: </span>
+                                <span className='text-black'>{user.taskResponse}</span>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
             <Separator className="my-6" />
             <div className="grid md:grid-cols-2 gap-8">
