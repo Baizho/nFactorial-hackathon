@@ -254,6 +254,51 @@ class UserController {
     }
   }
 
+  async getAssignTask(req: Request, res: Response) {
+    const { email } = req.body;
+    try {
+      console.log("checkig user");
+      // const user = await getUserByEmailService(email);
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: 'v4', auth: client });
+
+      try {
+        // Read the existing data
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: 'users', // Fetch all data from the sheet
+        });
+
+        const rows = response.data.values;
+        if (!rows.length) {
+          console.log('No data found.');
+          return;
+        }
+
+        // Find the index of the row with the matching email
+        const headers = rows[0];
+        const emailIndex = headers.indexOf('email');
+        const taskIndex = headers.indexOf('task');
+
+
+        const rowIndex = rows.findIndex(row => row[emailIndex] === email);
+        if (rowIndex === -1) {
+          console.log('No user found with that email.');
+          return;
+        }
+
+        res.status(200).json(rows[rowIndex][taskIndex]);
+
+        console.log('User task returned  successfully.');
+      } catch (error) {
+        console.error('Error updating user task:', error);
+      }
+
+    } catch (err: any) {
+      res.status(500).json({ error: "assigning task failed" });
+    }
+  }
+
   async taskResponse(req: Request, res: Response) {
     const { email, githubLink } = req.body;
     try {

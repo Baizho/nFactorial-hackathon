@@ -8,6 +8,7 @@ const userController = new UserController();
 userRouter.post("/userEmail", userController.getUserByEmail);
 userRouter.post("/checkUserApplication", userController.checkUserApplication);
 userRouter.post("/assignTask", userController.assignTask);
+userRouter.post("/getAssignTask", userController.getAssignTask);
 userRouter.post("/taskResponse", userController.taskResponse);
 
 export default userRouter;
