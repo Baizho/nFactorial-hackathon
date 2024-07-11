@@ -27,5 +27,6 @@ export default interface FormQuestions {
     favAI: string,
     availabilityInAlmaty: boolean;
     needAccommodationInAlmaty: boolean;
-    representativeGroups: string[]; // Array of group names
+    representativeGroups: string[];
+    isApprovedByAI: string;
 }
