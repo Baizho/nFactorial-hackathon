@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import adminService from './admin-service';
+import { admin } from 'googleapis/build/src/apis/admin';
 
 class AdminController {
   async check(req: Request, res: Response): Promise<void> {
@@ -11,24 +12,6 @@ class AdminController {
     }
   }
 
-  async changeUserRole(req: Request, res: Response): Promise<void> {
-    const { id, role } = req.body;
-
-    try {
-      const updatedUser = await adminService.changeUserRole(id, role);
-
-      if (!updatedUser) {
-        res.status(404).json({ message: 'User not found' });
-        return;
-      }
-
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      console.error('Failed to update user role:', error);
-      res.status(500).json({ message: 'Failed to update user role' });
-    }
-  }
-
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       const users = await adminService.getAllUsers();
@@ -36,6 +19,18 @@ class AdminController {
     } catch (error) {
       console.error('Failed to fetch users:', error);
       res.status(500).json({ message: 'Failed to fetch users' });
+    }
+  }
+
+  async getUserByEmail(req: Request, res: Response) {
+    const { email } = req.body;
+
+    try {
+      const user = await adminService.getUserByEmail(email);
+      res.status(201).json(user);
+    } catch (err: any) {
+      console.error('Not found', err);
+      res.status(500).json({ message: 'Not found' });
     }
   }
 }

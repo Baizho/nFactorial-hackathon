@@ -5,7 +5,7 @@ enum ProgrammingSkillLevel {
     CompetitiveProgrammer = "Спортивный программист",
     ProfessionalDeveloper = "Профессиональный разработчик",
 }
-export default interface FormQuestions {
+export default interface User {
     fullName: string;
     email: string;
     birthDate: string; // Format: DD.MM.YYYY
@@ -28,4 +28,6 @@ export default interface FormQuestions {
     availabilityInAlmaty: boolean;
     needAccommodationInAlmaty: boolean;
     representativeGroups: string[]; // Array of group names
+    task: string;
+    taskResponse: string;
 }

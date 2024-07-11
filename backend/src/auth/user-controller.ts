@@ -1,54 +1,75 @@
 import { Request, Response } from 'express';
-import UserModel, { IUser } from './models/User';
+
+// Load the service account key JSON file.
+const serviceAccount = require('../../third-container-429109-j6-15facf76dc65.json');
+
+const { google } = require('googleapis');
+const fs = require('fs');
+const path = require('path');
+
+
+
+// Create an authorized client.
+const auth = new google.auth.GoogleAuth({
+  credentials: serviceAccount,
+  scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
+});
+
+// Specify the spreadsheet ID and range.
+const spreadsheetId = process.env.SpreadSheetId;
+
 
 class UserController {
-  async getMentors(req: Request, res: Response) {
+
+  async getUserByEmail(req: Request, res: Response) {
+    const { email } = req.body;
+    const range = "users"; // Adjust the range as needed.
     try {
-      res.status(200).json(await UserModel.find({ role: 'mentor' }).exec());
-    } catch(err: any) {
-      console.error('Not found', err);
-      res.status(500).json({ message: 'Not found' });
-    }
-  }
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: 'v4', auth: client });
 
-  async getUserById(req: Request, res: Response) {
-    const userId = req.params.id;
-    try {
-      res.status(200).json(await UserModel.find({ _id: userId }).exec());
-    } catch(err: any) {
-      console.error('Not found', err);
-      res.status(500).json({ message: 'Not found' });
-    }
-  }
+      try {
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range,
+        });
 
-  async updateSettings(req: Request, res: Response): Promise<void> {
-    const { email, password, name, surname, image, descr, calendly_link } = req.body;
+        const rows = response.data.values;
+        if (rows.length) {
+          // Extract headers
+          const headers = rows[0];
+          // Extract data rows
+          const dataRows = rows.slice(1);
 
-    try {
-      const updatedFields: Partial<IUser> = {};
-      
-      if (email) updatedFields.email = email;
-      if (password) updatedFields.password = password;
-      if (name) updatedFields.name = name;
-      if (surname) updatedFields.surname = surname;
-      if (image) updatedFields.image = image;
-      if (descr) updatedFields.descr = descr;
-      if (calendly_link) updatedFields.calendly_link = calendly_link;
-  
-      const userId = (req as any).user?.id;
-      const updatedUser = await UserModel.findByIdAndUpdate(userId, updatedFields, { new: true }).exec();
+          // Find the row with the matching email
+          const matchingRow = dataRows.find(row => {
+            const emailIndex = headers.indexOf('email');
+            return row[emailIndex] === email;
+          });
 
-      if (!updatedUser) {
-        res.status(404).json({ message: 'User not found' });
-        return;
+          if (matchingRow) {
+            // Map the matching row to a FormQuestions object
+            const formQuestion = {};
+            await headers.forEach((header, index) => {
+              formQuestion[header] = matchingRow[index];
+            });
+            return res.status(200).json(formQuestion);
+          } else {
+            return res.status(404).json({ error: 'No user found with that email.' });
+          }
+        } else {
+          return res.status(404).json({ error: 'No data found.' });
+        }
+      } catch (error) {
+        console.error('Error reading spreadsheet:', error);
+        return res.status(500).json({ error: 'Internal server error.' });
       }
-
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      console.error('Error updating user settings:', error);
-      res.status(500).json({ message: 'Error updating user settings' });
+    } catch (err: any) {
+      console.error('Not found', err);
     }
   }
+
+
 }
 
 export default UserController;
