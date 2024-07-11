@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { JSX, SVGProps, useEffect, useState } from "react";
-import adminInstance from "@/adminInstance";
+import axiosInstance from "@/adminInstance";
 
 export default function TaskManagement({ openModal }: any) {
   const [users, setUsers] = useState<any[]>([]);
@@ -12,7 +12,7 @@ export default function TaskManagement({ openModal }: any) {
   const [responses, setResponses] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    adminInstance.get("/user/all")
+    axiosInstance.get("/user/all")
       .then((res) => {
         if (Array.isArray(res.data)) {
           setUsers(res.data);
@@ -27,7 +27,7 @@ export default function TaskManagement({ openModal }: any) {
   }, []);
 
   const fetchAssignedTasks = (email: string) => {
-    adminInstance.post("/getAssignTask", { email })
+    axiosInstance.post("/getAssignTask", { email })
       .then((res) => {
         setTasks(prevTasks => ({ ...prevTasks, [email]: res.data.tasks || [] }));
       })
@@ -42,7 +42,7 @@ export default function TaskManagement({ openModal }: any) {
 
   const handleSendResponse = (email: string) => {
     const response = responses[email];
-    adminInstance.post("/taskResponse", { email, response })
+    axiosInstance.post("/taskResponse", { email, response })
       .then((res) => {
         console.log("Response sent successfully:", res.data);
         setResponses(prevResponses => ({ ...prevResponses, [email]: "" })); // Clear the input after response is sent
