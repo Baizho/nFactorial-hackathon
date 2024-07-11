@@ -256,7 +256,6 @@ class UserController {
 
   async taskResponse(req: Request, res: Response) {
     const { email, githubLink } = req.body;
-    // hello
     try {
       console.log("checkig user");
       // const user = await getUserByEmailService(email);
