@@ -30,6 +30,7 @@ export default interface User {
     representativeGroups: string[];
     isApprovedByAI: string;
     commentsByAI: string;
+    feedbackByMentor: string;
     task: string;
     taskResponse: string;
 }
