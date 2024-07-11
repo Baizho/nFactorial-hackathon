@@ -7,7 +7,8 @@ import adminInstance from "@/adminInstance";
 
 export default function MainContent({ openModal }: any) {
   const [users, setUsers] = useState<any[]>([]);
-  const [task, setTask] = useState<string>("");
+  const [tasks, setTasks] = useState<{ [key: string]: string }>({});
+  const [responses, setResponses] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     adminInstance.get("/user/all")
@@ -23,14 +24,28 @@ export default function MainContent({ openModal }: any) {
       });
   }, []);
 
-  const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTask(e.target.value);
+  useEffect(() => {
+    users.forEach((user) => {
+      adminInstance.post("/getResponseTask", { email: user.email })
+        .then((res) => {
+          setResponses((prevResponses) => ({ ...prevResponses, [user.email]: res.data.response || "" }));
+        })
+        .catch((error) => {
+          console.error(`Failed to fetch response for ${user.email}:`, error);
+        });
+    });
+  }, [users]);
+
+  const handleTaskChange = (email: string, task: string) => {
+    setTasks(prevTasks => ({ ...prevTasks, [email]: task }));
   };
 
   const handleAssignTask = (email: string) => {
+    const task = tasks[email];
     adminInstance.post("/assignTask", { email, task })
       .then((res) => {
         console.log("Task assigned successfully:", res.data);
+        setTasks(prevTasks => ({ ...prevTasks, [email]: "" })); // Clear the input after task is assigned
       })
       .catch((error) => {
         console.error("Failed to assign task:", error);
@@ -50,6 +65,7 @@ export default function MainContent({ openModal }: any) {
                 <TableHead>Name and Email</TableHead>
                 <TableHead>AI Approved?</TableHead>
                 <TableHead>Actions</TableHead>
+                <TableHead>Response</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -60,17 +76,17 @@ export default function MainContent({ openModal }: any) {
                     <TableCell>
                       {
                         user.isApprovedByAI === "yes" ? <Badge className="bg-[#4caf50] text-white px-2 py-1 rounded-full">YES</Badge> :
-                          user.isApprovedByAI === "not sure" ? <Badge className="bg-yellow-800 text-white px-2 py-1 rounded-full">NOT SURE</Badge> :
-                            <Badge className="bg-transparent border border-red-800 text-red-800 px-2 py-1 rounded-full">NO</Badge>
-                      }
+                        user.isApprovedByAI === "not sure" ? <Badge className="bg-yellow-800 text-white px-2 py-1 rounded-full">NOT SURE</Badge> :
+                        <Badge className="bg-transparent border border-red-800 text-red-800 px-2 py-1 rounded-full">NO</Badge>
+                      } 
                     </TableCell>
                     <TableCell>
                       {
                         user.isApprovedByAI === "yes" && (
                           <>
                             <input
-                              value={task}
-                              onChange={handleTaskChange}
+                              value={tasks[user.email] || ""}
+                              onChange={(e) => handleTaskChange(user.email, e.target.value)}
                               placeholder="Enter task"
                               className="bg-[#2b2b2b] text-white mr-2"
                             />
@@ -79,7 +95,15 @@ export default function MainContent({ openModal }: any) {
                             </Button>
                           </>
                         )
-                      }
+                      }                  
+                    </TableCell>
+                    <TableCell>
+                      <textarea
+                        value={responses[user.email] || ""}
+                        readOnly
+                        className="bg-[#2b2b2b] text-white border-none"
+                        rows={1}
+                      />
                     </TableCell>
                   </TableRow>
                 )
