@@ -15,7 +15,7 @@ export default interface User {
     willingToParticipateOnPaidBasis: boolean;
     telegramHandle: string;
     linkedInLink: string;
-    socialMediaLinks: string[]; // Array of URLs
+    socialMediaLinks: string; // Array of URLs
     gitHubHandle: string;
     educationalPlacement: string; // University/College/High school
     specialtyAtUniversity: string;
@@ -27,7 +27,7 @@ export default interface User {
     favAI: string,
     availabilityInAlmaty: boolean;
     needAccommodationInAlmaty: boolean;
-    representativeGroups: string[];
+    representativeGroups: string;
     isApprovedByAI: string;
     commentsByAI: string;
     feedbackByMentor: string;

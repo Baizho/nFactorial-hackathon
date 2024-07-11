@@ -334,7 +334,7 @@ class UserController {
 
         // If task column does not exist, add it
         if (taskResponseIndex === -1) {
-          headers.push('task');
+          headers.push('taskResponse');
         }
 
         // Update the task column

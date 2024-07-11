@@ -40,143 +40,140 @@ const userApplication = (props: Props) => {
                     <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
                 <div className="grid gap-1">
-                    <h1 className="text-2xl font-bold">John Doe</h1>
-                    <p className="text-muted-foreground">john@example.com</p>
+                    <h1 className="text-2xl font-bold">{user.fullName}</h1>
+                    <p className="text-muted-foreground">{user.email} {user.birthDate}</p>
+                </div>
+            </div>
+            <div className="grid gap-2">
+                <div className="grid gap-2 text-muted-foreground">
+                    <div>
+                        <span className="font-medium">Approval Status: </span>
+                        {user.isApprovedByAI === "yes" && <span className='text-green-500 font-bold text-lg'>Approved</span>}
+                        {user.isApprovedByAI === "not sure" && <span className='text-yellow-400 font-bold text-lg'>Not sure (wait for mentor to check)</span>}
+                        {user.isApprovedByAI === "no" && <span className='text-red-500 font-bold text-lg'>Rejected</span>}
+                    </div>
+                    <div>
+                        <span className="font-medium">Comments: </span>
+                        <span>
+                            {user.commentsByAI}
+                        </span>
+                    </div>
+                    <div>
+                        <span className="font-medium">Feedback from Mentor: </span>
+                        <span>
+                            {!user.feedbackByMentor && user.isApprovedByAI === "not sure" && <span>Waiting for Mentor feedback...</span>}
+                            {!user.feedbackByMentor && user.isApprovedByAI === "yes" && <span>You already got accepted without mentor feedback!</span>}
+                            {!user.feedbackByMentor && user.isApprovedByAI === "no" && <span>You already got rejected without mentor feedback!</span>}
+                            {user.feedbackByMentor && <span>{user.feedbackByMentor}</span>}
+                        </span>
+                    </div>
                 </div>
             </div>
             <Separator className="my-6" />
             <div className="grid md:grid-cols-2 gap-8">
                 <div className="grid gap-6">
                     <div className="grid gap-2">
-                        <h2 className="text-lg font-semibold">Contact Information</h2>
-                        <div className="grid gap-2 text-muted-foreground">
-                            <div className="flex items-center gap-2">
-                                <PhoneIcon className="w-5 h-5" />
-                                <span>+1 (123) 456-7890</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <TextIcon className="w-5 h-5" />
-                                <Link href="#" className="hover:underline" prefetch={false}>
-                                    @johndoe
-                                </Link>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <LinkedinIcon className="w-5 h-5" />
-                                <Link href="#" className="hover:underline" prefetch={false}>
-                                    linkedin.com/in/johndoe
-                                </Link>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <GitlabIcon className="w-5 h-5" />
-                                <Link href="#" className="hover:underline" prefetch={false}>
-                                    github.com/johndoe
-                                </Link>
+                        <div className='flex flex-col gap-y-4'>
+                            <h2 className="text-lg font-semibold">Contact Information</h2>
+                            <div className="grid gap-y-3 text-muted-foreground">
+                                <div className="flex items-center gap-2">
+                                    <PhoneIcon className="w-5 h-5" />
+                                    <span>{user.phoneNumber}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5 text-white">
+                                        <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.22l15.54-6c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.16.73-.59.91-1.19.56L12 16.3l-2.56 2.45c-.31.31-.57.57-1.16.57z" />
+                                    </svg>
+                                    <span>{user.telegramHandle}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <LinkedinIcon className="w-5 h-5" />
+                                    <span>{user.linkedInLink}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <GitlabIcon className="w-5 h-5" />
+                                    <span>{user.gitHubHandle}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <TextIcon className="w-5 h-5" />
+                                    <span>Social Media links: {user.socialMediaLinks}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="grid gap-2">
+                    <div className="flex flex-col gap-y-4">
                         <h2 className="text-lg font-semibold">Educational Background</h2>
-                        <div className="grid gap-2 text-muted-foreground">
+                        <div className="grid gap-y-3 text-muted-foreground">
                             <div>
-                                <span className="font-medium">University of Example</span>
-                                <span> - Computer Science</span>
-                            </div>
-                            <div>
-                                <span className="font-medium">Graduated: </span>
-                                <span>May 2020</span>
+                                <span className="font-medium">{user.educationalPlacement}</span>
+                                <span> - {user.specialtyAtUniversity}</span>
                             </div>
                             <div>
                                 <span className="font-medium">Job Placement: </span>
-                                <span>Software Engineer</span>
+                                <span>{user.jobPlacement}</span>
                             </div>
                         </div>
                     </div>
-                    <div className="grid gap-2">
+                    <div className="flex flex-col gap-y-4">
                         <h2 className="text-lg font-semibold">Programming Skills &amp; Experience</h2>
-                        <div className="grid gap-2 text-muted-foreground">
+                        <div className="grid gap-y-3 text-muted-foreground">
                             <div>
                                 <span className="font-medium">Skill Level: </span>
-                                <span>Advanced</span>
+                                <span>{user.programmingSkillLevel}</span>
                             </div>
                             <div>
-                                <span className="font-medium">Experience: </span>
-                                <span>3+ years</span>
+                                <span className="font-medium">Programming Experience Description: </span>
+                                <span>{user.programmingExperienceDescription}</span>
                             </div>
                             <div>
                                 <span className="font-medium">Past Projects: </span>
                                 <span>
-                                    Developed a web application for a local business, built a mobile app for a non-profit organization,
-                                    and contributed to an open-source project.
+                                    {user.pastProgrammingProjects}
                                 </span>
                             </div>
                             <div>
                                 <span className="font-medium">Best Achievements: </span>
                                 <span>
-                                    Received a performance award at my previous job, and had one of my open-source contributions merged
-                                    into the main repository.
+                                    {user.bestAchievements}
                                 </span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="grid gap-6">
-                    <div className="grid gap-2">
+                    <div className="flex flex-col gap-y-3">
                         <h2 className="text-lg font-semibold">Interests &amp; Ideas</h2>
                         <div className="grid gap-2 text-muted-foreground">
                             <div>
                                 <span className="font-medium">Ideas: </span>
                                 <span>
-                                    I'm interested in developing AI-powered tools to help streamline business processes and improve
-                                    productivity.
+                                    {user.ideas}
                                 </span>
                             </div>
                             <div>
                                 <span className="font-medium">Favorite AI: </span>
-                                <span>ChatGPT</span>
+                                <span>{user.favAI}</span>
                             </div>
                         </div>
                     </div>
-                    <div className="grid gap-2">
+                    <div className="flex flex-col gap-y-3">
                         <h2 className="text-lg font-semibold">Availability</h2>
                         <div className="grid gap-2 text-muted-foreground">
                             <div>
-                                <span className="font-medium">Willing to Participate: </span>
-                                <span>Yes, on a paid basis</span>
+                                <span className="font-medium">Willing to Participate on Paid Basis: </span>
+                                <span>{user.willingToParticipateOnPaidBasis ? "Yes" : "No"}</span>
                             </div>
                             <div>
                                 <span className="font-medium">Availability in Almaty: </span>
-                                <span>Yes</span>
+                                <span>{user.availabilityInAlmaty ? "Yes" : "No"}</span>
                             </div>
                             <div>
                                 <span className="font-medium">Need for Accommodation: </span>
-                                <span>Yes</span>
+                                <span>{user.needAccommodationInAlmaty ? "Yes" : "No"}</span>
                             </div>
                             <div>
                                 <span className="font-medium">Representative Groups: </span>
-                                <span>None</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="grid gap-2">
-                        <h2 className="text-lg font-semibold">Additional Information</h2>
-                        <div className="grid gap-2 text-muted-foreground">
-                            <div>
-                                <span className="font-medium">Approval Status: </span>
-                                <span>Approved</span>
-                            </div>
-                            <div>
-                                <span className="font-medium">Comments: </span>
-                                <span>
-                                    John has a strong technical background and a keen interest in AI. We believe he would be a valuable
-                                    addition to the team.
-                                </span>
-                            </div>
-                            <div>
-                                <span className="font-medium">Feedback from Mentor: </span>
-                                <span>
-                                    John has demonstrated excellent problem-solving skills and a willingness to learn. I'm confident he
-                                    will be a great contributor to the project.
-                                </span>
+                                <span>{user.representativeGroups}</span>
                             </div>
                         </div>
                     </div>
@@ -220,6 +217,8 @@ const userApplication = (props: Props) => {
         </div>
     )
 }
+
+export default userApplication;
 
 function FileIcon(props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>) {
     return (

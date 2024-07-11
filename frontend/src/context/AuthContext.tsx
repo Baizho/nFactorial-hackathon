@@ -32,7 +32,7 @@ const initialUser = {
     willingToParticipateOnPaidBasis: false,
     telegramHandle: "",
     linkedInLink: "",
-    socialMediaLinks: [], // Array of URLs
+    socialMediaLinks: "",
     gitHubHandle: "",
     educationalPlacement: "", // University/College/High school
     specialtyAtUniversity: "",
@@ -61,7 +61,7 @@ export default interface User {
     willingToParticipateOnPaidBasis: boolean;
     telegramHandle: string;
     linkedInLink: string;
-    socialMediaLinks: string[]; // Array of URLs
+    socialMediaLinks: string;
     gitHubHandle: string;
     educationalPlacement: string; // University/College/High school
     specialtyAtUniversity: string;

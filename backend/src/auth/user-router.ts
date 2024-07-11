@@ -10,6 +10,6 @@ userRouter.post("/checkUserApplication", userController.checkUserApplication);
 userRouter.post("/assignTask", userController.assignTask);
 userRouter.post("/getAssignTask", userController.getAssignTask);
 userRouter.post("/taskResponse", userController.taskResponse);
-userRouter.post("/getTaskResponse", userController.getTaskResponse);
+userRouter.post("/getResponseTask", userController.getTaskResponse);
 
 export default userRouter;

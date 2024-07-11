@@ -24,7 +24,7 @@ You will receive the following information in json for each applicant:
     "willingToParticipateOnPaidBasis": "Boolean indicating willingness to participate on a paid basis or get  scholarship",
     "telegramHandle": "Telegram handle of the user",
     "linkedInLink": "LinkedIn profile URL of the user",
-    "socialMediaLinks": ["Array of social media profile URLs"],
+    "socialMediaLinks": "social media profile URLs",
     "gitHubHandle": "GitHub handle of the user",
     "educationalPlacement": "Educational institution (University/College/High school)",
     "specialtyAtUniversity": "User's specialty at university",
@@ -36,7 +36,7 @@ You will receive the following information in json for each applicant:
     "favAI": "User's favorite AI applications",
     "availabilityInAlmaty": "Boolean indicating availability in Almaty",
     "needAccommodationInAlmaty": "Boolean indicating need for accommodation in Almaty",
-    "representativeGroups": ["Array of groups the applicant belongs to"],
+    "representativeGroups": "Group the applicant belongs to",
     "feedback": "Feedback about the user",
     "isApprovedByAI": "Indicates whether the user is approved by AI"
   }
@@ -77,7 +77,7 @@ Here are examples of rejected students, take this into consideration because acc
     "willingToParticipateOnPaidBasis": "",
     "telegramHandle": "@Black_ali567",
     "linkedInLink": "",
-    "socialMediaLinks": ["https://www.instagram.com/bidano5?igsh=MXdhZWU0MGRhOGxzYw=="],
+    "socialMediaLinks": "https://www.instagram.com/bidano5?igsh=MXdhZWU0MGRhOGxzYw==",
     "gitHubHandle": "",
     "educationalPlacement": "РФМШ",
     "specialtyAtUniversity": "",
@@ -89,7 +89,7 @@ Here are examples of rejected students, take this into consideration because acc
     "favAI": "",
     "availabilityInAlmaty": "",
     "needAccommodationInAlmaty": "",
-    "representativeGroups": [""],
+    "representativeGroups": "",
     "feedback": "",
     "isApprovedByAI": ""
 }
@@ -104,7 +104,7 @@ Here are examples of rejected students, take this into consideration because acc
     "willingToParticipateOnPaidBasis": "",
     "telegramHandle": "Qserik",
     "linkedInLink": "",
-    "socialMediaLinks": [],
+    "socialMediaLinks": "",
     "gitHubHandle": "Serik96",
     "educationalPlacement": "Казгу",
     "specialtyAtUniversity": "Геоинформатика",
@@ -116,7 +116,7 @@ Here are examples of rejected students, take this into consideration because acc
     "favAI": "",
     "availabilityInAlmaty": "",
     "needAccommodationInAlmaty": "",
-    "representativeGroups": [""],
+    "representativeGroups": "",
     "feedback": "",
     "isApprovedByAI": ""
   }
@@ -131,7 +131,7 @@ Here are examples of rejected students, take this into consideration because acc
     "willingToParticipateOnPaidBasis": "",
     "telegramHandle": "@lilulsus",
     "linkedInLink": "https://www.linkedin.com/in/ilyas-karim-link?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
-    "socialMediaLinks": [],
+    "socialMediaLinks": "",
     "gitHubHandle": "CHOCOLATE-KZ",
     "educationalPlacement": "IITU University",
     "specialtyAtUniversity": "Software engineer",
@@ -143,7 +143,7 @@ Here are examples of rejected students, take this into consideration because acc
     "favAI": "",
     "availabilityInAlmaty": "",
     "needAccommodationInAlmaty": "",
-    "representativeGroups": [""],
+    "representativeGroups": "",
     "feedback": "",
     "isApprovedByAI": ""
   }
@@ -153,13 +153,13 @@ Here are examples of rejected students, take this into consideration because acc
 const genModelCheck = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: systemPromptCheckApplication, generationConfig: { "response_mime_type": "application/json" } });
 
 async function checkUserApplication(user: User | undefined | null | void | {}) {
-    console.log(user);
-    const res = await genModelCheck.generateContent(`
+  console.log(user);
+  const res = await genModelCheck.generateContent(`
         Here is the users information:
         ${JSON.stringify(user)}
     `);
-    const feedback = await res.response;
-    return JSON.parse(feedback.text());
+  const feedback = await res.response;
+  return JSON.parse(feedback.text());
 }
 
 
