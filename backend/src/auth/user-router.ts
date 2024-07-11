@@ -6,5 +6,6 @@ const userRouter = Router();
 const userController = new UserController();
 
 userRouter.post("/userEmail", userController.getUserByEmail);
+userRouter.post("/checkUserApplication", userController.checkUserApplication);
 
 export default userRouter;
