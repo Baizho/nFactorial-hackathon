@@ -126,7 +126,7 @@ class UserController {
     try {
       console.log("checkig user");
       const user = await getUserByEmailService(email);
-      console.log(user);
+      
       const feedback = await checkUserApplication(user);
 
       const client = await auth.getClient();

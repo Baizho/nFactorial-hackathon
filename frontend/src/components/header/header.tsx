@@ -19,13 +19,18 @@ const Header = (props: Props) => {
             </Link>
             <nav className="flex items-center gap-4">
 
-                {user.email ? (
+                {user.isApprovedByAI === "yes" ? (
                     <>
                         <Link href="/courses" className="hover:text-rose-500" prefetch={false}>
                             Assigned Tasks
                         </Link>
                     </>
-                ) : (
+                ) : user.isApprovedByAI === "no" ? (
+                    <>
+                        <Link href="/" className="hover:text-rose-500" prefetch={false}>
+                            YOU ARE NOT ACCEPTED
+                        </Link>
+                    </>) : (
                     <>
 
                     </>

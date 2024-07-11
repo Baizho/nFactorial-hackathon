@@ -7,6 +7,7 @@ import adminInstance from "@/adminInstance";
 
 export default function MainContent({ openModal }: any) {
   const [users, setUsers] = useState<any[]>([]);
+  const [task, setTask] = useState<string>("");
 
   useEffect(() => {
     adminInstance.get("/user/all")
@@ -22,11 +23,24 @@ export default function MainContent({ openModal }: any) {
       });
   }, []);
 
+  const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTask(e.target.value);
+  };
+
+  const handleAssignTask = (email: string) => {
+    adminInstance.post("/assignTask", { email, task })
+      .then((res) => {
+        console.log("Task assigned successfully:", res.data);
+      })
+      .catch((error) => {
+        console.error("Failed to assign task:", error);
+      });
+  };
+
   return (
     <div className="flex flex-col h-screen bg-[#1a1a1a] text-white">
       <header className="bg-[#2b2b2b] py-4 px-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">User Management</h1>
-        <div className="flex items-center gap-2"></div>
       </header>
       <main className="flex-1 overflow-auto p-6">
         <div className="bg-[#2b2b2b] rounded-lg shadow-lg">
@@ -52,12 +66,22 @@ export default function MainContent({ openModal }: any) {
                     </TableCell>
                     <TableCell>
                     {
-                          user.isApprovedByAI === "yes" ? <Badge className="bg-[#4caf50] text-white px-2 py-1 rounded-full">Assign a Task</Badge> :
-                          user.isApprovedByAI === "not sure" ? <Badge className="bg-yellow text-white px-2 py-1 rounded-full">Help an AI</Badge> : <></>
-                        } 
+                          user.isApprovedByAI === "yes" && (
+                            <>
+                              <input
+                                value={task}
+                                onChange={handleTaskChange}
+                                placeholder="Enter task"
+                                className="bg-[#2b2b2b] text-white mr-2"
+                              />
+                              <Button onClick={() => handleAssignTask(user.email)} className="bg-[#4caf50] text-white">
+                                Assign Task
+                              </Button>
+                            </>
+                          )
+                    }                  
                     </TableCell>
                   </TableRow>
-                  
                 )
               }
             </TableBody>
