@@ -50,10 +50,22 @@ async function readSpreadsheet() {
 
     const rows = response.data.values;
     if (rows.length) {
-      console.log('Data from spreadsheet:');
-      rows.forEach((row) => {
-        console.log(row);
+      // Extract headers
+      const headers = rows[0];
+      // Extract data rows
+      const dataRows = rows.slice(1);
+
+      // Map rows to FormQuestions objects
+      const formQuestionsArray = dataRows.map(row => {
+        const formQuestion = {};
+        headers.forEach((header, index) => {
+          formQuestion[header] = row[index];
+        });
+        return formQuestion;
       });
+
+      // Log the resulting objects
+      console.log('Mapped FormQuestions:', formQuestionsArray);
     } else {
       console.log('No data found.');
     }
