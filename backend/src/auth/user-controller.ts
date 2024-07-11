@@ -69,9 +69,6 @@ async function getUserByEmailService(email: string): Promise<User | undefined | 
 }
 
 class UserController {
-  taskResponse(arg0: string, taskResponse: any) {
-      throw new Error('Method not implemented.');
-  }
 
 
 
@@ -127,9 +124,9 @@ class UserController {
   async checkUserApplication(req: Request, res: Response) {
     const { email } = req.body;
     try {
-      console.log("checkig user");
+      // console.log("checkig user");
       const user = await getUserByEmailService(email);
-      
+      // console.log(user);
       const feedback = await checkUserApplication(user);
 
       const client = await auth.getClient();
@@ -197,7 +194,215 @@ class UserController {
   }
 
   async assignTask(req: Request, res: Response) {
+    const { email, task } = req.body;
+    try {
+      console.log("checkig user");
+      // const user = await getUserByEmailService(email);
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: 'v4', auth: client });
 
+      try {
+        // Read the existing data
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: 'users', // Fetch all data from the sheet
+        });
+
+        const rows = response.data.values;
+        if (!rows.length) {
+          console.log('No data found.');
+          return;
+        }
+
+        // Find the index of the row with the matching email
+        const headers = rows[0];
+        const emailIndex = headers.indexOf('email');
+        const taskIndex = headers.indexOf('task');
+
+
+        const rowIndex = rows.findIndex(row => row[emailIndex] === email);
+        if (rowIndex === -1) {
+          console.log('No user found with that email.');
+          return;
+        }
+
+        // If task column does not exist, add it
+        if (taskIndex === -1) {
+          headers.push('task');
+        }
+
+        // Update the task column
+        rows[rowIndex][taskIndex === -1 ? headers.length - 1 : taskIndex] = task;
+
+        // Update the sheet with the new data
+        await sheets.spreadsheets.values.update({
+          spreadsheetId,
+          range: `users!A1:Z${rows.length}`, // Adjust range to cover all rows
+          valueInputOption: 'RAW',
+          resource: {
+            values: rows,
+          },
+        });
+
+        console.log('User task updated successfully.');
+      } catch (error) {
+        console.error('Error updating user task:', error);
+      }
+
+    } catch (err: any) {
+      res.status(500).json({ error: "assigning task failed" });
+    }
+  }
+
+  async getAssignTask(req: Request, res: Response) {
+    const { email } = req.body;
+    try {
+      console.log("checkig user");
+      // const user = await getUserByEmailService(email);
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: 'v4', auth: client });
+
+      try {
+        // Read the existing data
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: 'users', // Fetch all data from the sheet
+        });
+
+        const rows = response.data.values;
+        if (!rows.length) {
+          console.log('No data found.');
+          return;
+        }
+
+        // Find the index of the row with the matching email
+        const headers = rows[0];
+        const emailIndex = headers.indexOf('email');
+        const taskIndex = headers.indexOf('task');
+
+
+        const rowIndex = rows.findIndex(row => row[emailIndex] === email);
+        if (rowIndex === -1) {
+          console.log('No user found with that email.');
+          return;
+        }
+
+        res.status(200).json(rows[rowIndex][taskIndex]);
+
+        console.log('User task returned  successfully.');
+      } catch (error) {
+        console.error('Error getting user task:', error);
+      }
+
+    } catch (err: any) {
+      res.status(500).json({ error: "getting task failed" });
+    }
+  }
+
+  async taskResponse(req: Request, res: Response) {
+    const { email, githubLink } = req.body;
+    try {
+      console.log("checkig user");
+      // const user = await getUserByEmailService(email);
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: 'v4', auth: client });
+
+      try {
+        // Read the existing data
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: 'users', // Fetch all data from the sheet
+        });
+
+        const rows = response.data.values;
+        if (!rows.length) {
+          console.log('No data found.');
+          return;
+        }
+
+        // Find the index of the row with the matching email
+        const headers = rows[0];
+        const emailIndex = headers.indexOf('email');
+        const taskResponseIndex = headers.indexOf('taskResponse');
+
+
+        const rowIndex = rows.findIndex(row => row[emailIndex] === email);
+        if (rowIndex === -1) {
+          console.log('No user found with that email.');
+          return;
+        }
+
+        // If task column does not exist, add it
+        if (taskResponseIndex === -1) {
+          headers.push('task');
+        }
+
+        // Update the task column
+        rows[rowIndex][taskResponseIndex === -1 ? headers.length - 1 : taskResponseIndex] = githubLink;
+
+        // Update the sheet with the new data
+        await sheets.spreadsheets.values.update({
+          spreadsheetId,
+          range: `users!A1:Z${rows.length}`, // Adjust range to cover all rows
+          valueInputOption: 'RAW',
+          resource: {
+            values: rows,
+          },
+        });
+
+        console.log('User task response updated successfully.');
+      } catch (error) {
+        console.error('Error updating user task response:', error);
+      }
+
+    } catch (err: any) {
+      res.status(500).json({ error: "assigning task response failed" });
+    }
+  }
+  async getTaskResponse(req: Request, res: Response) {
+    const { email } = req.body;
+    try {
+      console.log("checkig user");
+      // const user = await getUserByEmailService(email);
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: 'v4', auth: client });
+
+      try {
+        // Read the existing data
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: 'users', // Fetch all data from the sheet
+        });
+
+        const rows = response.data.values;
+        if (!rows.length) {
+          console.log('No data found.');
+          return;
+        }
+
+        // Find the index of the row with the matching email
+        const headers = rows[0];
+        const emailIndex = headers.indexOf('email');
+        const taskResponseIndex = headers.indexOf('taskResponse');
+
+
+        const rowIndex = rows.findIndex(row => row[emailIndex] === email);
+        if (rowIndex === -1) {
+          console.log('No user found with that email.');
+          return;
+        }
+
+
+        res.status(200).json(rows[rowIndex][taskResponseIndex]);
+
+        console.log('User task response returned successfully.');
+      } catch (error) {
+        console.error('Error getting user task response:', error);
+      }
+
+    } catch (err: any) {
+      res.status(500).json({ error: "getting task response failed" });
+    }
   }
 }
 
