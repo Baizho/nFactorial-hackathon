@@ -12,23 +12,7 @@ export default function MainContent({ openModal }: any) {
     adminInstance.get("/user/all").then((res) => setUsers(res.data));
   }, []);
 
-  const addMentor = (id: string) => {
-    adminInstance.post("/user/role", {
-      id,
-      role: "mentor",
-    }).then(() => adminInstance.get("/user/all").then((res) => {
-      console.log(res.data);
-      setUsers(res.data)
-    }))
-  }
-
-  const removeMentor = (id: string) => {
-    adminInstance.post("/user/role", {
-      id,
-      role: "user",
-    }).then(() => adminInstance.get("/user/all").then((res) => setUsers(res.data)))
-  }
-
+  
   return (
     <div className="flex flex-col h-screen bg-[#1a1a1a] text-white">
       <div className="flex flex-col h-screen bg-[#1a1a1a] text-white">
@@ -43,8 +27,8 @@ export default function MainContent({ openModal }: any) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Mentor</TableHead>
+                  <TableHead>Name and Email</TableHead>
+                  <TableHead>AI Approved?</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -52,7 +36,7 @@ export default function MainContent({ openModal }: any) {
                 {
                   users.map((user: any, index) =>
                     <TableRow key={index}>
-                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.fullName} {user.email}</TableCell>
                       <TableCell>
                         {
                           user.role === "mentor" ? <Badge className="bg-[#4caf50] text-white px-2 py-1 rounded-full">Mentor</Badge> :
@@ -63,9 +47,7 @@ export default function MainContent({ openModal }: any) {
                       </TableCell>
                       <TableCell>
                         {
-                          user.role === "mentor" ? <Button className="bg-[#f44336] hover:bg-[#e53935]" onClick={() => removeMentor(user._id)}>
-                            Remove Mentor
-                          </Button> : <Button className="bg-[#4caf50] hover:bg-[#43a047]" onClick={() => addMentor(user._id)}>Add Mentor</Button>
+                          
                         }
                       </TableCell>
                     </TableRow>
