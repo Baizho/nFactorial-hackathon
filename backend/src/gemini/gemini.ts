@@ -150,7 +150,7 @@ Here are examples of rejected students, take this into consideration because acc
 `;
 
 const genModelCheck = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: systemPromptCheckApplication, generationConfig: { "response_mime_type": "application/json" } });
-const serviceAccount = require('@/../../third-container-429109-j6-15facf76dc65.json');
+const serviceAccount = require('@/../../third-container-429109-j6-0741277fd35a.json');
 
 const { google } = require('googleapis');
 const fs = require('fs');

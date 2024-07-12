@@ -9,7 +9,7 @@ import userRouter from "./auth/user-router";
 import fileUpload from "express-fileupload"
 const TelegramBot = require('node-telegram-bot-api');
 
-const serviceAccount = require('@/../../third-container-429109-j6-15facf76dc65.json');
+const serviceAccount = require('@/../../third-container-429109-j6-0741277fd35a.json');
 const { google } = require('googleapis');
 const app = express();
 
