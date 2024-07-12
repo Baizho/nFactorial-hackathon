@@ -2,7 +2,7 @@ import axios from "axios";
 
 // export const BACKEND_URL = "http://157.230.239.9:3000"
 // export const BACKEND_URL = "http://localhost:5000";
-const BACKEND_URL = "https://n-factorial-hackathon.vercel.app";
+const BACKEND_URL = "https://n-factorial-hackathons.vercel.app";
 
 const axiosInstance = axios.create({
     baseURL: BACKEND_URL,

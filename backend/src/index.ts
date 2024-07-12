@@ -11,7 +11,13 @@ const TelegramBot = require('node-telegram-bot-api');
 const serviceAccount = require('./../third-container-429109-j6-15facf76dc65.json');
 const { google } = require('googleapis');
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,            //access-control-allow-credentials:true
+  optionSuccessStatus: 200
+}
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(adminRouter);
 app.use(userRouter);
