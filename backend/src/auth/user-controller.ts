@@ -519,6 +519,67 @@ class UserController {
       res.status(500).json({ error: "getting task response failed" });
     }
   }
+  async changeAnswer(req: Request, res: Response) {
+    const { email, answer } = req.body;
+    try {
+      console.log("checkig user");
+      // const user = await getUserByEmailService(email);
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: 'v4', auth: client });
+
+      try {
+        // Read the existing data
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: 'users', // Fetch all data from the sheet
+        });
+
+        const rows = response.data.values;
+        if (!rows.length) {
+          console.log('No data found.');
+          return;
+        }
+
+        // Find the index of the row with the matching email
+        const headers = rows[0];
+        const emailIndex = headers.indexOf('email');
+        const aiIndex = headers.indexOf('isApprovedByAI');
+
+
+        const rowIndex = rows.findIndex(row => row[emailIndex] === email);
+        if (rowIndex === -1) {
+          console.log('No user found with that email.');
+          return;
+        }
+
+        // If task column does not exist, add it
+        if (aiIndex === -1) {
+          headers.push('feedbackByMentor');
+        }
+
+        // Update the task column
+        rows[rowIndex][aiIndex === -1 ? headers.length - 1 : aiIndex] = answer;
+
+        // Update the sheet with the new data
+        await sheets.spreadsheets.values.update({
+          spreadsheetId,
+          range: `users!A1:AB${rows.length}`, // Adjust range to cover all rows
+          valueInputOption: 'RAW',
+          resource: {
+            values: rows,
+          },
+        });
+
+        console.log('User task response updated successfully.');
+        res.status(201).json({ message: "ok" });
+      } catch (error) {
+        console.error('Error updating user task response:', error);
+      }
+
+    } catch (err: any) {
+      res.status(500).json({ error: "assigning task response failed" });
+    }
+  }
 }
 
 export default UserController;

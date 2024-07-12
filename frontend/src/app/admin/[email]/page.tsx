@@ -32,11 +32,34 @@ const userApplication = (props: Props) => {
         getData();
     }, []);
 
-    const handleMentorFeedback = async () => {
+    const handleMentorYes = async () => {
         await axiosInstance.post("/feedbackByMentor", {
             email: user?.email,
             feedback: mentorFeedback,
         });
+        await axiosInstance.post("/changeAnswer", {
+            email: user?.email,
+            answer: "yes",
+        })
+        const getData = async () => {
+            const res = await axiosInstance.post("/userByEmail", {
+                email: email
+            });
+            const user = res.data;
+            console.log(user);
+            setUser(user);
+        }
+        getData();
+    }
+    const handleMentorNo = async () => {
+        await axiosInstance.post("/feedbackByMentor", {
+            email: user?.email,
+            feedback: mentorFeedback,
+        });
+        await axiosInstance.post("/changeAnswer", {
+            email: user?.email,
+            answer: "no",
+        })
         const getData = async () => {
             const res = await axiosInstance.post("/userByEmail", {
                 email: email
@@ -91,10 +114,13 @@ const userApplication = (props: Props) => {
                                     <span>Waiting for Mentor feedback...</span>
                                     <div className='text-lg text-black font-bold my-2'>Mentor Feedback!</div>
                                     {/* <div className='w-full flex'></div> */}
-                                    <textarea className='min-h-[160px] bg-gray-200 w-full' value={mentorFeedback} onChange={(e) => { setMentorFeedback(e.target.value) }}></textarea>
+                                    <textarea className='min-h-[160px] p-2 text-black bg-gray-200 w-full' value={mentorFeedback} onChange={(e) => { setMentorFeedback(e.target.value) }}></textarea>
 
-                                    <Button onClick={handleMentorFeedback} className="bg-blue-400 text-white">
-                                        Send Feedback
+                                    <Button onClick={handleMentorYes} className="bg-green-400 text-white">
+                                        Accept
+                                    </Button>
+                                    <Button onClick={handleMentorNo} className="bg-red-400 text-white ml-2">
+                                        Reject
                                     </Button>
                                 </>
                             )}

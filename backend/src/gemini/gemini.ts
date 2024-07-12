@@ -40,7 +40,6 @@ You will receive the following information in json for each applicant:
     "feedback": "Feedback about the user",
     "isApprovedByAI": "Indicates whether the user is approved by AI"
   }
-  
 1. if the user is not available in ALmaty, it means he should get rejected immediantly.
 2. If the user has little information or if the information is not understandable, reject it immediantly.
 
