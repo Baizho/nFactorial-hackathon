@@ -18,21 +18,9 @@ const Header = (props: Props) => {
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA_XCjvUbql2PGh76wU3T8WHu4FpzNDLssHw&s" alt="" className='ml-2 w-10' />
             </Link>
             <nav className="flex items-center gap-4">
-
-                {user.isApprovedByAI === "yes" && (
-                    <>
-                        <Link href="/courses" className="hover:text-rose-500" prefetch={false}>
-                            Application
-                        </Link>
-                    </>
-                )}
-                {user.isApprovedByAI === "no" && (
-                    <>
-                        <Link href="/courses" className="hover:text-rose-500" prefetch={false}>
-                            Application
-                        </Link>
-                    </>
-                )}
+                <Link href="/courses" className="hover:text-rose-500" prefetch={false}>
+                    Application
+                </Link>
                 {user.email ? (
                     <>
                         <Link href="/profile" className="flex items-center gap-2" prefetch={false}>
@@ -41,6 +29,9 @@ const Header = (props: Props) => {
                                 <AvatarFallback>JD</AvatarFallback>
                             </Avatar>
                             <span className="hidden md:inline">{user.fullName}</span>
+                            {user.isApprovedByAI === "" && (
+                                <span className="text-red-500 ml-2">Проверьте свою аппликацию</span>
+                            )}
                         </Link>
                     </>
                 ) : (
@@ -52,7 +43,6 @@ const Header = (props: Props) => {
         </header>
     )
 }
-
 
 function BookOpenIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
     return (
