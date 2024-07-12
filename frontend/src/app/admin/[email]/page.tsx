@@ -14,7 +14,7 @@ type Props = {
     }
 }
 
-const userApplication = (props: Props) => {
+const UserApplication = (props: Props) => {
     const email = props.params.email.replace("%40", "@");
     const [mentorAnswer, setMentorAnswer] = useState("yes");
     const [user, setUser] = useState<User | undefined>();
@@ -276,7 +276,7 @@ const userApplication = (props: Props) => {
     )
 }
 
-export default userApplication;
+export default UserApplication;
 
 function FileIcon(props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>) {
     return (
