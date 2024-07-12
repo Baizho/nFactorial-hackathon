@@ -128,7 +128,7 @@ const userApplication = (props: Props) => {
                       defaultValue={user.taskResponse}
                       onChange={(e) => handleResponseChange(e.target.value)}
                       placeholder="Enter response"
-                      className="bg-white text-black mr-2 border-[2px]"
+                      className="bg-white text-black mr-2 mb-2 border-[2px]"
                     />
                     <Button onClick={() => handleSendResponse(user.email)} className="bg-[#4caf50] text-white">
                       Send Response
