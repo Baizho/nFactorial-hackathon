@@ -27,8 +27,12 @@ export default function Component() {
     try {
       const res = await axiosInstance.post("/checkUserApplication", { email: user.email });
       console.log("User application checked successfully:", res.data);
+
+      // Send notification to Telegram
+      await axiosInstance.post("/notify-admin", { email: user.email, fullName: user.fullName });
+      console.log("Notification sent to admin.");
     } catch (error) {
-      console.error("Failed to check user application:", error);
+      console.error("Failed to check user application or send notification:", error);
     } finally {
       setLoading(false);
     }
