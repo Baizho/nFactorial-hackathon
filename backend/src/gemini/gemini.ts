@@ -206,7 +206,7 @@ async function checkUserApplication(user: User | undefined | null | void) {
         ${JSON.stringify(user)}.
 
         Here is data of how mentors gave feedback to students that you made the decision of "not sure". 
-        Take these feedback into consideration when looking at the users: ${feedbackByMentor}
+        Take these feedback into consideration when looking at the users:
     `);
   const feedback = await res.response;
   return JSON.parse(feedback.text());

@@ -10,6 +10,45 @@ const fs = require('fs');
 const path = require('path');
 
 
+enum ProgrammingSkillLevel {
+  NoExperience = "Нет опыта, не программирую",
+  SelfStudy = "Обучаюсь самостоятельно используя онлайн курсы",
+  ITStudent = "Имею хорошие базовые навыки студента IT",
+  CompetitiveProgrammer = "Спортивный программист",
+  ProfessionalDeveloper = "Профессиональный разработчик",
+}
+
+
+const initialUser = {
+  fullName: "",
+  email: "",
+  birthDate: "",// Format: DD.MM.YYYY
+  phoneNumber: "",
+  programmingSkillLevel: ProgrammingSkillLevel.NoExperience,
+  cv: "", // Optional: URL or base64 encoded ""
+  willingToParticipateOnPaidBasis: false,
+  telegramHandle: "",
+  linkedInLink: "",
+  socialMediaLinks: "",
+  gitHubHandle: "",
+  educationalPlacement: "", // University/College/High school
+  specialtyAtUniversity: "",
+  jobPlacement: "", // Optional
+  programmingExperienceDescription: "",
+  pastProgrammingProjects: "",
+  bestAchievements: "",
+  ideas: "",
+  favAI: "",
+  availabilityInAlmaty: false,
+  needAccommodationInAlmaty: false,
+  representativeGroups: "",
+  isApprovedByAI: "",
+  commentsByAI: "",
+  feedbackByMentor: "",
+  task: "",
+  taskResponse: "",
+};
+
 
 // Create an authorized client.
 const auth = new google.auth.GoogleAuth({
@@ -49,14 +88,15 @@ async function getUserByEmailService(email: string): Promise<User | undefined | 
         if (matchingRow) {
           // Map the matching row to a FormQuestions object
           async function getData() {
-            const formQuestion = {};
+            const formQuestion = initialUser;
             await headers.forEach((header, index) => {
               formQuestion[header] = matchingRow[index];
             });
-            console.log(formQuestion);
+            // console.log(formQuestion);
             return formQuestion;
           }
-          const formQuestion = await getData();
+          const formQuestion: User = await getData();
+          return formQuestion;
         } else {
           console.log('No user found with that email.');
         }
@@ -127,10 +167,10 @@ class UserController {
   async checkUserApplication(req: Request, res: Response) {
     const { email } = req.body;
     try {
-      // console.log("Checking user application for email:", email);
+      console.log("Checking user application for email:", email);
       const user = await getUserByEmailService(email);
       if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        return res.status(500).json({ error: "User not found" });
       }
       const feedback = await checkUserApplication(user);
 
