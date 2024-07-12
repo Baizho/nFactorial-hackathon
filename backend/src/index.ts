@@ -13,7 +13,7 @@ const { google } = require('googleapis');
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'https://n-factorial-hackathon-front.vercel.app',
   credentials: true,            //access-control-allow-credentials:true
   optionSuccessStatus: 200
 }
