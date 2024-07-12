@@ -451,7 +451,7 @@ class UserController {
         }
 
         // Update the task column
-        rows[rowIndex][feedbackIndex === -1 ? headers.length - 1 : feedbackIndex] = feedbackIndex;
+        rows[rowIndex][feedbackIndex === -1 ? headers.length - 1 : feedbackIndex] = feedback;
 
         // Update the sheet with the new data
         await sheets.spreadsheets.values.update({

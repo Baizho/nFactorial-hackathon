@@ -9,7 +9,6 @@ import React, {
 } from "react";
 import { useRouter } from "next/navigation";
 
-import axios from "axios";
 import axiosInstance from "@/axiosInstance";
 
 
@@ -113,12 +112,13 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
     const refreshUser = async () => {
         try {
+            console.log("user is upadted");
             const res = await axiosInstance.post("/userEmail", {
                 email: user.email
             });
             console.log("user is upadted");
             const userCur = res.data;
-            // console.log(user);
+            // console.log(userCur);
             setUser(userCur);
         } catch (err: any) {
             console.log("erorr refreshing user", err);

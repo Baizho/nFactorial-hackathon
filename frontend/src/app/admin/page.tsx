@@ -5,6 +5,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { Badge } from "@/components/ui/badge";
 import { JSX, SVGProps, useEffect, useState } from "react";
 import adminInstance from "@/adminInstance";
+import Link from "next/link";
 
 export default function MainContent({ openModal }: any) {
   const [users, setUsers] = useState<any[]>([]);
@@ -57,6 +58,7 @@ export default function MainContent({ openModal }: any) {
     <div className="flex flex-col h-screen bg-[#1a1a1a] text-white">
       <header className="bg-[#2b2b2b] py-4 px-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">User Management</h1>
+        <h3>Text this <Link className="text-blue-400 font-bold" href="https://t.me/nfactorial_ai_bot" target="_blank">Telegram Bot</Link> to recieve updates of users</h3>
       </header>
       <main className="flex-1 overflow-auto p-6">
         <div className="bg-[#2b2b2b] rounded-lg shadow-lg">
@@ -90,7 +92,7 @@ export default function MainContent({ openModal }: any) {
                               value={tasks[user.email] || ""}
                               onChange={(e) => handleTaskChange(user.email, e.target.value)}
                               placeholder="Enter task"
-                              className="bg-[#2b2b2b] text-white mr-2"
+                              className="bg-gray-300 text-black mr-2"
                             />
                             <Button onClick={() => handleAssignTask(user.email)} className="bg-[#4caf50] text-white">
                               Assign Task
@@ -102,9 +104,17 @@ export default function MainContent({ openModal }: any) {
                       <textarea
                         value={responses[user.email] || ""}
                         readOnly
-                        className="bg-[#2b2b2b] text-white border-none"
+                        className="bg-gray-300 text-black border-none"
                         rows={1}
                       />
+                    </TableCell>
+                    <TableCell>
+
+                      <Link href={`/admin/${user.email}`}>
+                        <Button onClick={() => handleAssignTask(user.email)} className="bg-blue-400 text-white">
+                          Go to profile
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 )

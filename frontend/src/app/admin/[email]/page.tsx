@@ -2,10 +2,11 @@
 
 import axiosInstance from '@/adminInstance'
 import React, { useEffect, useState } from 'react'
-import User from '@/context/AuthContext'
+import User, { useUser } from '@/context/AuthContext'
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
+import { Button } from '@/components/ui/button'
 
 type Props = {
     params: {
@@ -15,7 +16,9 @@ type Props = {
 
 const userApplication = (props: Props) => {
     const email = props.params.email.replace("%40", "@");
+    const [mentorAnswer, setMentorAnswer] = useState("yes");
     const [user, setUser] = useState<User | undefined>();
+    const [mentorFeedback, setMentorFeedback] = useState("");
     console.log(email);
     useEffect(() => {
         const getData = async () => {
@@ -28,6 +31,22 @@ const userApplication = (props: Props) => {
         }
         getData();
     }, []);
+
+    const handleMentorFeedback = async () => {
+        await axiosInstance.post("/feedbackByMentor", {
+            email: user?.email,
+            feedback: mentorFeedback,
+        });
+        const getData = async () => {
+            const res = await axiosInstance.post("/userByEmail", {
+                email: email
+            });
+            const user = res.data;
+            console.log(user);
+            setUser(user);
+        }
+        getData();
+    }
 
     if (!user) {
         return <div className='text-center'>Your application is loading</div>
@@ -50,7 +69,12 @@ const userApplication = (props: Props) => {
                     <div>
                         <span className="font-medium">Approval Status: </span>
                         {user.isApprovedByAI === "yes" && <span className='text-green-500 font-bold text-lg'>Approved</span>}
-                        {user.isApprovedByAI === "not sure" && <span className='text-yellow-400 font-bold text-lg'>Not sure (wait for mentor to check)</span>}
+                        {user.isApprovedByAI === "not sure" && (
+                            <>
+                                <span className='text-yellow-400 font-bold text-lg'>Not sure (wait for mentor to check)</span>
+
+                            </>
+                        )}
                         {user.isApprovedByAI === "no" && <span className='text-red-500 font-bold text-lg'>Rejected</span>}
                     </div>
                     <div>
@@ -62,7 +86,18 @@ const userApplication = (props: Props) => {
                     <div>
                         <span className="font-medium">Feedback from Mentor: </span>
                         <span>
-                            {!user.feedbackByMentor && user.isApprovedByAI === "not sure" && <span>Waiting for Mentor feedback...</span>}
+                            {!user.feedbackByMentor && user.isApprovedByAI === "not sure" && (
+                                <>
+                                    <span>Waiting for Mentor feedback...</span>
+                                    <div className='text-lg text-black font-bold my-2'>Mentor Feedback!</div>
+                                    {/* <div className='w-full flex'></div> */}
+                                    <textarea className='min-h-[160px] bg-gray-200 w-full' value={mentorFeedback} onChange={(e) => { setMentorFeedback(e.target.value) }}></textarea>
+
+                                    <Button onClick={handleMentorFeedback} className="bg-blue-400 text-white">
+                                        Send Feedback
+                                    </Button>
+                                </>
+                            )}
                             {!user.feedbackByMentor && user.isApprovedByAI === "yes" && <span>You already got accepted without mentor feedback!</span>}
                             {!user.feedbackByMentor && user.isApprovedByAI === "no" && <span>You already got rejected without mentor feedback!</span>}
                             {user.feedbackByMentor && <span>{user.feedbackByMentor}</span>}
@@ -206,8 +241,8 @@ const userApplication = (props: Props) => {
                 <h2 className="text-lg font-semibold">CV</h2>
                 <div className="flex items-center gap-4">
                     <FileIcon className="w-6 h-6" />
-                    <Link href="#" className="hover:underline" prefetch={false}>
-                        Download John's CV
+                    <Link href={`${user.cv}`} className="hover:underline" prefetch={false} target='_blank'>
+                        Check {user.fullName}'s CV
                     </Link>
                 </div>
             </div>
