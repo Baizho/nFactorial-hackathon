@@ -11,5 +11,7 @@ userRouter.post("/assignTask", userController.assignTask);
 userRouter.post("/getAssignTask", userController.getAssignTask);
 userRouter.post("/taskResponse", userController.taskResponse);
 userRouter.post("/getResponseTask", userController.getTaskResponse);
+userRouter.post("/feedbackByMentor", userController.feedbackByMentor);
+userRouter.post("/getFeedbackByMentor", userController.getFeedbackByMentor);
 
 export default userRouter;

@@ -19,7 +19,7 @@ const auth = new google.auth.GoogleAuth({
 
 // Specify the spreadsheet ID and range.
 const spreadsheetId = process.env.SpreadSheetId;
-async function getUserByEmailService(email: string): Promise<User | undefined | null | void | {}> {
+async function getUserByEmailService(email: string): Promise<User | undefined | null | void> {
   const range = "users"; // Adjust the range as needed.
   console.log("authorizd");
   try {
@@ -48,12 +48,15 @@ async function getUserByEmailService(email: string): Promise<User | undefined | 
 
         if (matchingRow) {
           // Map the matching row to a FormQuestions object
-          const formQuestion = {};
-          await headers.forEach((header, index) => {
-            formQuestion[header] = matchingRow[index];
-          });
-          console.log(formQuestion);
-          return formQuestion;
+          async function getData() {
+            const formQuestion = {};
+            await headers.forEach((header, index) => {
+              formQuestion[header] = matchingRow[index];
+            });
+            console.log(formQuestion);
+            return formQuestion;
+          }
+          const formQuestion = await getData();
         } else {
           console.log('No user found with that email.');
         }
@@ -124,55 +127,55 @@ class UserController {
   async checkUserApplication(req: Request, res: Response) {
     const { email } = req.body;
     try {
-      console.log("Checking user application for email:", email);
+      // console.log("Checking user application for email:", email);
       const user = await getUserByEmailService(email);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
       const feedback = await checkUserApplication(user);
-  
+
       const client = await auth.getClient();
       const sheets = google.sheets({ version: 'v4', auth: client });
-  
+
       try {
         // Read the existing data
         const response = await sheets.spreadsheets.values.get({
           spreadsheetId,
           range: 'users', // Fetch all data from the sheet
         });
-  
+
         const rows = response.data.values;
         if (!rows.length) {
           console.log('No data found.');
           return res.status(404).json({ error: "No data found in spreadsheet" });
         }
-  
+
         // Find the index of the row with the matching email
         const headers = rows[0];
         const emailIndex = headers.indexOf('email');
         const decisionIndex = headers.indexOf('isApprovedByAI');
         const commentIndex = headers.indexOf('commentsByAI');
-  
+
         const rowIndex = rows.findIndex(row => row[emailIndex] === email);
         if (rowIndex === -1) {
           console.log('No user found with that email.');
           return res.status(404).json({ error: "No user found with that email" });
         }
-  
+
         // If decision column does not exist, add it
         if (decisionIndex === -1) {
           headers.push('isApprovedByAI');
         }
-  
+
         // Update the decision column
         rows[rowIndex][decisionIndex === -1 ? headers.length - 1 : decisionIndex] = feedback.Decision;
-  
+
         // If comment column does not exist, add it
         if (commentIndex === -1) {
           headers.push('commentsByAI');
         }
         rows[rowIndex][commentIndex === -1 ? headers.length - 1 : commentIndex] = feedback.Comments;
-  
+
         // Update the sheet with the new data
         await sheets.spreadsheets.values.update({
           spreadsheetId,
@@ -182,7 +185,7 @@ class UserController {
             values: rows,
           },
         });
-  
+
         console.log('User decision updated successfully.');
         res.status(201).json(feedback);
       } catch (error) {
@@ -194,7 +197,7 @@ class UserController {
       res.status(500).json({ error: "Error checking user application" });
     }
   }
-  
+
 
   async assignTask(req: Request, res: Response) {
     const { email, task } = req.body;
@@ -444,7 +447,7 @@ class UserController {
 
         // If task column does not exist, add it
         if (feedbackIndex === -1) {
-          headers.push('taskResponse');
+          headers.push('feedbackByMentor');
         }
 
         // Update the task column
@@ -468,6 +471,52 @@ class UserController {
 
     } catch (err: any) {
       res.status(500).json({ error: "assigning task response failed" });
+    }
+  }
+
+  async getFeedbackByMentor(req: Request, res: Response) {
+    const { email } = req.body;
+    try {
+      console.log("checkig user");
+      // const user = await getUserByEmailService(email);
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: 'v4', auth: client });
+
+      try {
+        // Read the existing data
+        const response = await sheets.spreadsheets.values.get({
+          spreadsheetId,
+          range: 'users', // Fetch all data from the sheet
+        });
+
+        const rows = response.data.values;
+        if (!rows.length) {
+          console.log('No data found.');
+          return;
+        }
+
+        // Find the index of the row with the matching email
+        const headers = rows[0];
+        const emailIndex = headers.indexOf('email');
+        const feedbackIndex = headers.indexOf('feedbackByMentor');
+
+
+        const rowIndex = rows.findIndex(row => row[emailIndex] === email);
+        if (rowIndex === -1) {
+          console.log('No user found with that email.');
+          return;
+        }
+
+
+        res.status(200).json(rows[rowIndex][feedbackIndex]);
+
+        console.log('User task response returned successfully.');
+      } catch (error) {
+        console.error('Error getting user task response:', error);
+      }
+
+    } catch (err: any) {
+      res.status(500).json({ error: "getting task response failed" });
     }
   }
 }
