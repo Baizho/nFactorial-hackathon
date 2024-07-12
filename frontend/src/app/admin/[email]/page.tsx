@@ -19,7 +19,7 @@ const UserApplication = (props: Props) => {
     const [mentorAnswer, setMentorAnswer] = useState("yes");
     const [user, setUser] = useState<User | undefined>();
     const [mentorFeedback, setMentorFeedback] = useState("");
-    console.log(email);
+    // console.log(email);
     useEffect(() => {
         const getData = async () => {
             const res = await axiosInstance.post("/userByEmail", {
@@ -268,7 +268,7 @@ const UserApplication = (props: Props) => {
                 <div className="flex items-center gap-4">
                     <FileIcon className="w-6 h-6" />
                     <Link href={`${user.cv}`} className="hover:underline" prefetch={false} target='_blank'>
-                        Check {user.fullName}'s CV
+                        Check {user.fullName}s CV
                     </Link>
                 </div>
             </div>
