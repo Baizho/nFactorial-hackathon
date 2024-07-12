@@ -106,7 +106,7 @@ export default function Component() {
                 </Button>
               )}
               {!loading && (
-                <Link href="/courses" passHref>
+                <Link href="/application" passHref>
                   <Button className="bg-green-500 text-white hover:bg-green-300 mt-4">
                     Go to your Application
                   </Button>
