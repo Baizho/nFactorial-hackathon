@@ -19,23 +19,13 @@ const Header = (props: Props) => {
             </Link>
             <nav className="flex items-center gap-4">
 
-                {user.isApprovedByAI === "yes" && (
-                    <>
-                        <Link href="/application" className="hover:text-rose-500" prefetch={false}>
-                            Application
-                        </Link>
-                    </>
-                )}
-                {user.isApprovedByAI === "no" && (
-                    <>
-                        <Link href="/application" className="hover:text-rose-500" prefetch={false}>
-                            Application
-                        </Link>
-                    </>
-                )}
+        
+                  
                 {user.email ? (
                     <>
-                        
+                        <Link href="/application" className="hover:text-rose-500" prefetch={false}>
+                            Application
+                        </Link>
                         <Link href="/profile" className="flex items-center gap-2" prefetch={false}>
                             <Avatar className="h-8 w-8">
                                 <AvatarImage src="/placeholder-user.jpg" />
