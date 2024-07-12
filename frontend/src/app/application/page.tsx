@@ -15,7 +15,7 @@ interface Props {
 
 }
 
-const userApplication = (props: Props) => {
+const UserApplication = (props: Props) => {
   const router = useRouter();
   const email = useUser().user.email;
   const [user, setUser] = useState<User | undefined>();
@@ -264,7 +264,7 @@ const userApplication = (props: Props) => {
   )
 }
 
-export default userApplication;
+export default UserApplication;
 
 function FileIcon(props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>) {
   return (
