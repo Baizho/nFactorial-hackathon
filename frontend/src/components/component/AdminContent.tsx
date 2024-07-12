@@ -102,7 +102,7 @@ export default function MainContent({ openModal }: any) {
                     </TableCell>
                     <TableCell>
                       <textarea
-                        value={responses[user.email] || ""}
+                        value={user.taskResponse}
                         readOnly
                         className="bg-gray-300 text-black border-none"
                         rows={1}
