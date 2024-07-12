@@ -85,6 +85,7 @@ interface UserContextType {
     user: User;
     setUser: React.Dispatch<React.SetStateAction<User>>;
     loginUser: (email: string, password: string) => Promise<void>;
+    refreshUser: () => Promise<void>;
     LogoutUser: () => void;
 }
 
@@ -110,6 +111,20 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         }
     };
 
+    const refreshUser = async () => {
+        try {
+            const res = await axiosInstance.post("/userEmail", {
+                email: user.email
+            });
+            console.log("user is upadted");
+            const userCur = res.data;
+            // console.log(user);
+            setUser(userCur);
+        } catch (err: any) {
+            console.log("erorr refreshing user", err);
+        }
+    }
+
     const LogoutUser = () => {
         setUser(initialUser);
         router.push("/");
@@ -119,6 +134,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         user,
         setUser,
         loginUser,
+        refreshUser,
         LogoutUser,
     };
 
