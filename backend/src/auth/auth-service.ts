@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const serviceAccount = require('../../third-container-429109-j6-15facf76dc65.json');
+const serviceAccount = require('@/../../third-container-429109-j6-15facf76dc65.json');
 
 const { google } = require('googleapis');
 const fs = require('fs');

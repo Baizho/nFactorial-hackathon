@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import User from '../application';
 import { checkUserApplication } from '../gemini/gemini';
 
+
 // Load the service account key JSON file.
-const serviceAccount = require('../../third-container-429109-j6-15facf76dc65.json');
+const serviceAccount = require('@/../../third-container-429109-j6-15facf76dc65.json');
 
 const { google } = require('googleapis');
 const fs = require('fs');

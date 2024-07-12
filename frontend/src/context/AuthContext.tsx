@@ -43,7 +43,7 @@ const initialUser = {
     favAI: "",
     availabilityInAlmaty: false,
     needAccommodationInAlmaty: false,
-    representativeGroups: [],
+    representativeGroups: "",
     isApprovedByAI: "",
     commentsByAI: "",
     feedbackByMentor: "",
@@ -72,7 +72,7 @@ export default interface User {
     favAI: string,
     availabilityInAlmaty: boolean;
     needAccommodationInAlmaty: boolean;
-    representativeGroups: string[];
+    representativeGroups: string;
     isApprovedByAI?: string;
     commentsByAI?: string;
     feedbackByMentor?: string;
@@ -103,6 +103,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 email: email,
                 birthDate: password,
             });
+            console.log(res.data, 'sucess');
             setUser(res.data);
             router.push("/profile")
         } catch (err) {

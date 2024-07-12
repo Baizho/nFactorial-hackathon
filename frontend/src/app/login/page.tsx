@@ -8,6 +8,7 @@ export default function Component() {
   const { loginUser } = useUser();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("lgoin!");
     loginUser(e.currentTarget.email.value, e.currentTarget.password.value)
   }
   return (
