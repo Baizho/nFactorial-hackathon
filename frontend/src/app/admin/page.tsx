@@ -67,6 +67,7 @@ export default function MainContent({ openModal }: any) {
                 <TableHead>AI Approved?</TableHead>
                 <TableHead>Actions</TableHead>
                 <TableHead>Response</TableHead>
+                <TableHead>Profile</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -77,9 +78,9 @@ export default function MainContent({ openModal }: any) {
                     <TableCell>
                       {
                         user.isApprovedByAI === "yes" ? <Badge className="bg-[#4caf50] text-white px-2 py-1 rounded-full">YES</Badge> :
-                        user.isApprovedByAI === "not sure" ? <Badge className="bg-yellow-800 text-white px-2 py-1 rounded-full">NOT SURE</Badge> :
-                        <Badge className="bg-transparent border border-red-800 text-red-800 px-2 py-1 rounded-full">NO</Badge>
-                      } 
+                          user.isApprovedByAI === "not sure" ? <Badge className="bg-yellow-800 text-white px-2 py-1 rounded-full">NOT SURE</Badge> :
+                            <Badge className="bg-transparent border border-red-800 text-red-800 px-2 py-1 rounded-full">NO</Badge>
+                      }
                     </TableCell>
                     <TableCell>
                       {
@@ -95,44 +96,43 @@ export default function MainContent({ openModal }: any) {
                               Assign Task
                             </Button>
                           </>
-                        )  }                  
-                        </TableCell>
-                        <TableCell>
-                          <textarea
-                            value={responses[user.email] || ""}
-                            readOnly
-                            className="bg-[#2b2b2b] text-white border-none"
-                            rows={1}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    )
-                  }
-                </TableBody>
-              </Table>
-            </div>
-          </main>
+                        )}
+                    </TableCell>
+                    <TableCell>
+                      <textarea
+                        value={responses[user.email] || ""}
+                        readOnly
+                        className="bg-[#2b2b2b] text-white border-none"
+                        rows={1}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )
+              }
+            </TableBody>
+          </Table>
         </div>
-      );
-    }
-    
-    function SearchIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-      return (
-        <svg
-          {...props}
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.3-4.3" />
-        </svg>
-      );
-    }
-    
+      </main>
+    </div>
+  );
+}
+
+function SearchIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+    </svg>
+  );
+}

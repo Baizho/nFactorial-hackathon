@@ -151,12 +151,63 @@ Here are examples of rejected students, take this into consideration because acc
 `;
 
 const genModelCheck = genAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: systemPromptCheckApplication, generationConfig: { "response_mime_type": "application/json" } });
+const serviceAccount = require('../../third-container-429109-j6-15facf76dc65.json');
 
-async function checkUserApplication(user: User | undefined | null | void | {}) {
-  console.log(user);
+const { google } = require('googleapis');
+const fs = require('fs');
+const path = require('path');
+
+
+
+// Create an authorized client.
+const auth = new google.auth.GoogleAuth({
+  credentials: serviceAccount,
+  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+});
+
+// Specify the spreadsheet ID and range.
+const spreadsheetId = process.env.SpreadSheetId;
+async function checkUserApplication(user: User | undefined | null | void) {
+  // console.log(user);
+  const feedbackByMentor: any[] = [];
+  if (!user) return null;
+  if (!user.email) return null;
+  const email = user.email;
+  if (!email) return null;
+  // const user = await getUserByEmailService(email);
+  const client = await auth.getClient();
+  const sheets = google.sheets({ version: 'v4', auth: client });
+
+  // Read the existing data
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: 'users', // Fetch all data from the sheet
+  });
+
+  const rows = response.data.values;
+  if (!rows.length) {
+    console.log('No data found.');
+    return;
+  }
+
+  // Find the index of the row with the matching email
+  const headers = rows[0];
+  const feedbackIndex = headers.indexOf('feedbackByMentor');
+
+  if (feedbackIndex === -1) {
+    headers.push('isApprovedByAI');
+  }
+
+  for (let i = 1; i < rows.length; i += 1) {
+    feedbackByMentor.push(rows[i][feedbackIndex === -1 ? headers.length - 1 : feedbackIndex]);
+  }
+
   const res = await genModelCheck.generateContent(`
         Here is the users information:
-        ${JSON.stringify(user)}
+        ${JSON.stringify(user)}.
+
+        Here is data of how mentors gave feedback to students that you made the decision of "not sure". 
+        Take these feedback into consideration when looking at the users: ${feedbackByMentor}
     `);
   const feedback = await res.response;
   return JSON.parse(feedback.text());
