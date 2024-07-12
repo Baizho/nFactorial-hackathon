@@ -21,14 +21,14 @@ const Header = (props: Props) => {
 
                 {user.isApprovedByAI === "yes" && (
                     <>
-                        <Link href="/application" className="hover:text-rose-500" prefetch={false}>
+                        <Link href="/courses" className="hover:text-rose-500" prefetch={false}>
                             Application
                         </Link>
                     </>
                 )}
                 {user.isApprovedByAI === "no" && (
                     <>
-                        <Link href="/application" className="hover:text-rose-500" prefetch={false}>
+                        <Link href="/courses" className="hover:text-rose-500" prefetch={false}>
                             Application
                         </Link>
                     </>
