@@ -95,44 +95,44 @@ export default function MainContent({ openModal }: any) {
                               Assign Task
                             </Button>
                           </>
-                        )
-                      }                  
-                    </TableCell>
-                    <TableCell>
-                      <textarea
-                        value={responses[user.email] || ""}
-                        readOnly
-                        className="bg-[#2b2b2b] text-white border-none"
-                        rows={1}
-                      />
-                    </TableCell>
-                  </TableRow>
-                )
-              }
-            </TableBody>
-          </Table>
+                        )  }                  
+                        </TableCell>
+                        <TableCell>
+                          <textarea
+                            value={responses[user.email] || ""}
+                            readOnly
+                            className="bg-[#2b2b2b] text-white border-none"
+                            rows={1}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    )
+                  }
+                </TableBody>
+              </Table>
+            </div>
+          </main>
         </div>
-      </main>
-    </div>
-  );
-}
-
-function SearchIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-  );
-}
+      );
+    }
+    
+    function SearchIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
+      return (
+        <svg
+          {...props}
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.3-4.3" />
+        </svg>
+      );
+    }
+    

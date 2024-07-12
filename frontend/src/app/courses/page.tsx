@@ -306,7 +306,6 @@ function GitlabIcon(props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVG
   )
 }
 
-
 function LinkedinIcon(props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>) {
   return (
     <svg
