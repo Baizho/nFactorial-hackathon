@@ -18,21 +18,22 @@ interface Props {
 const userApplication = (props: Props) => {
   const router = useRouter();
   const email = useUser().user.email;
-  if (!email) {
-    router.push("/login");
-  }
   const [user, setUser] = useState<User | undefined>();
   const [response, setResponse] = useState(user?.taskResponse);
   console.log(email);
-  const getData = async () => {
-    const res = await axiosInstance.post("/userEmail", {
-      email: email
-    });
-    const user = res.data;
-    // console.log(user);
-    setUser(user);
-  }
   useEffect(() => {
+    if (!email) {
+      router.push("/login");
+      return;
+    }
+    const getData = async () => {
+      const res = await axiosInstance.post("/userEmail", {
+        email: email
+      });
+      const user = res.data;
+      // console.log(user);
+      setUser(user);
+    }
     getData();
   }, []);
 
@@ -41,7 +42,8 @@ const userApplication = (props: Props) => {
   };
 
   const handleSendResponse = async (email: string) => {
-    await axiosInstance.post("/taskResponse", { email: email, githubLink: response })
+    console.log("here");
+    const res = await axiosInstance.post("/taskResponse", { email: email, githubLink: response })
       .then((res) => {
         console.log("Response sent successfully:", res.data);
         setResponse("");
@@ -49,7 +51,18 @@ const userApplication = (props: Props) => {
       .catch((error) => {
         console.error("Failed to send response:", error);
       });
-    await getData();
+    console.log("here it is");
+    const getData = async () => {
+      console.log("user getting");
+      const res = await axiosInstance.post("/userEmail", {
+        email: email
+      });
+      console.log("user is upadted");
+      const user = res.data;
+      // console.log(user);
+      setUser(user);
+    }
+    getData();
   };
 
   if (!user) {

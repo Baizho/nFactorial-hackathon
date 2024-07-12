@@ -351,6 +351,7 @@ class UserController {
         });
 
         console.log('User task response updated successfully.');
+        res.status(201).json({ message: "ok" });
       } catch (error) {
         console.error('Error updating user task response:', error);
       }

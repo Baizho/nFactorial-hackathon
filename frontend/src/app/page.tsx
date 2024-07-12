@@ -27,11 +27,12 @@ export default function Component() {
                 </div>
                 <div className="flex flex-col gap-3 min-[400px]:flex-row">
                   <Link
-                    href="/courses"
+                    target="_blank"
+                    href="https://docs.google.com/forms/d/e/1FAIpQLScCSIV8VomW-dJdhBE3kPNTaHUI6MAx19YKZqMmEid7qDMbXA/viewform?usp=sharing"
                     className="inline-flex h-12 items-center justify-center rounded-md bg-[#E01424] px-8 text-xl font-medium text-white shadow transition-colors hover:bg-red-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                     prefetch={false}
                   >
-                    Регистрация
+                    Подавать на nFactorial Incubator
                   </Link>
 
                 </div>
@@ -46,7 +47,7 @@ export default function Component() {
             </div>
           </div>
         </section>
-        
+
       </main>
     </div>
   )
