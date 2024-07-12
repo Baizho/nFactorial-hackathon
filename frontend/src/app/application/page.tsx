@@ -255,8 +255,8 @@ const UserApplication = (props: Props) => {
         <h2 className="text-lg font-semibold">CV</h2>
         <div className="flex items-center gap-4">
           <FileIcon className="w-6 h-6" />
-          <Link href="#" className="hover:underline" prefetch={false}>
-            Download John's CV
+          <Link href={`${user.cv}`} className="hover:underline" prefetch={false} target='_blank'>
+            Check {user.fullName}s CV
           </Link>
         </div>
       </div>
