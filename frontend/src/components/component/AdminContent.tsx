@@ -1,13 +1,16 @@
+'use client'
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { JSX, SVGProps, useEffect, useState } from "react";
 import adminInstance from "@/adminInstance";
+import Link from "next/link";
 
 export default function MainContent({ openModal }: any) {
   const [users, setUsers] = useState<any[]>([]);
-  const [task, setTask] = useState<string>("");
+  const [tasks, setTasks] = useState<{ [key: string]: string }>({});
+  const [responses, setResponses] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     adminInstance.get("/user/all")
@@ -23,14 +26,28 @@ export default function MainContent({ openModal }: any) {
       });
   }, []);
 
-  const handleTaskChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTask(e.target.value);
+  useEffect(() => {
+    users.forEach((user) => {
+      adminInstance.post("/getResponseTask", { email: user.email })
+        .then((res) => {
+          setResponses((prevResponses) => ({ ...prevResponses, [user.email]: res.data.response || "" }));
+        })
+        .catch((error) => {
+          console.error(`Failed to fetch response for ${user.email}:`, error);
+        });
+    });
+  }, [users]);
+
+  const handleTaskChange = (email: string, task: string) => {
+    setTasks(prevTasks => ({ ...prevTasks, [email]: task }));
   };
 
   const handleAssignTask = (email: string) => {
+    const task = tasks[email];
     adminInstance.post("/assignTask", { email, task })
       .then((res) => {
         console.log("Task assigned successfully:", res.data);
+        setTasks(prevTasks => ({ ...prevTasks, [email]: "" })); // Clear the input after task is assigned
       })
       .catch((error) => {
         console.error("Failed to assign task:", error);
@@ -41,6 +58,7 @@ export default function MainContent({ openModal }: any) {
     <div className="flex flex-col h-screen bg-[#1a1a1a] text-white">
       <header className="bg-[#2b2b2b] py-4 px-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">User Management</h1>
+        <h3>Text this <Link className="text-blue-400 font-bold" href="https://t.me/nfactorial_ai_bot" target="_blank">Telegram Bot</Link> to recieve updates of users</h3>
       </header>
       <main className="flex-1 overflow-auto p-6">
         <div className="bg-[#2b2b2b] rounded-lg shadow-lg">
@@ -50,6 +68,8 @@ export default function MainContent({ openModal }: any) {
                 <TableHead>Name and Email</TableHead>
                 <TableHead>AI Approved?</TableHead>
                 <TableHead>Actions</TableHead>
+                <TableHead>Response</TableHead>
+                <TableHead>Profile</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -69,17 +89,32 @@ export default function MainContent({ openModal }: any) {
                         user.isApprovedByAI === "yes" && (
                           <>
                             <input
-                              value={task}
-                              onChange={handleTaskChange}
+                              value={tasks[user.email] || ""}
+                              onChange={(e) => handleTaskChange(user.email, e.target.value)}
                               placeholder="Enter task"
-                              className="bg-[#2b2b2b] text-white mr-2"
+                              className="bg-gray-300 text-black mr-2"
                             />
                             <Button onClick={() => handleAssignTask(user.email)} className="bg-[#4caf50] text-white">
                               Assign Task
                             </Button>
                           </>
-                        )
-                      }
+                        )}
+                    </TableCell>
+                    <TableCell>
+                      <textarea
+                        value={responses[user.email] || ""}
+                        readOnly
+                        className="bg-gray-300 text-black border-none"
+                        rows={1}
+                      />
+                    </TableCell>
+                    <TableCell>
+
+                      <Link href={`/admin/${user.email}`}>
+                        <Button onClick={() => handleAssignTask(user.email)} className="bg-blue-400 text-white">
+                          Go to profile
+                        </Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 )
