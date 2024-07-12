@@ -124,55 +124,55 @@ class UserController {
   async checkUserApplication(req: Request, res: Response) {
     const { email } = req.body;
     try {
-      // console.log("checkig user");
+      console.log("Checking user application for email:", email);
       const user = await getUserByEmailService(email);
-      // console.log(user);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
       const feedback = await checkUserApplication(user);
-
+  
       const client = await auth.getClient();
       const sheets = google.sheets({ version: 'v4', auth: client });
-
+  
       try {
         // Read the existing data
         const response = await sheets.spreadsheets.values.get({
           spreadsheetId,
           range: 'users', // Fetch all data from the sheet
         });
-
+  
         const rows = response.data.values;
         if (!rows.length) {
           console.log('No data found.');
-          return;
+          return res.status(404).json({ error: "No data found in spreadsheet" });
         }
-
+  
         // Find the index of the row with the matching email
         const headers = rows[0];
         const emailIndex = headers.indexOf('email');
         const decisionIndex = headers.indexOf('isApprovedByAI');
         const commentIndex = headers.indexOf('commentsByAI');
-
-
+  
         const rowIndex = rows.findIndex(row => row[emailIndex] === email);
         if (rowIndex === -1) {
           console.log('No user found with that email.');
-          return;
+          return res.status(404).json({ error: "No user found with that email" });
         }
-
+  
         // If decision column does not exist, add it
         if (decisionIndex === -1) {
           headers.push('isApprovedByAI');
         }
-
-
+  
         // Update the decision column
         rows[rowIndex][decisionIndex === -1 ? headers.length - 1 : decisionIndex] = feedback.Decision;
-
+  
         // If comment column does not exist, add it
         if (commentIndex === -1) {
           headers.push('commentsByAI');
         }
         rows[rowIndex][commentIndex === -1 ? headers.length - 1 : commentIndex] = feedback.Comments;
-
+  
         // Update the sheet with the new data
         await sheets.spreadsheets.values.update({
           spreadsheetId,
@@ -182,16 +182,19 @@ class UserController {
             values: rows,
           },
         });
-
+  
         console.log('User decision updated successfully.');
+        res.status(201).json(feedback);
       } catch (error) {
         console.error('Error updating user decision:', error);
+        res.status(500).json({ error: "Internal server error while updating user decision" });
       }
-      res.status(201).json(feedback);
     } catch (err: any) {
-      res.status(500).json({ error: "error checking user application" });
+      console.error('Error checking user application:', err);
+      res.status(500).json({ error: "Error checking user application" });
     }
   }
+  
 
   async assignTask(req: Request, res: Response) {
     const { email, task } = req.body;
