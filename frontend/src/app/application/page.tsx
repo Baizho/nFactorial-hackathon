@@ -51,13 +51,13 @@ const userApplication = (props: Props) => {
       .catch((error) => {
         console.error("Failed to send response:", error);
       });
-    console.log("here it is");
+    // console.log("here it is");
     const getData = async () => {
       console.log("user getting");
       const res = await axiosInstance.post("/userEmail", {
         email: email
       });
-      console.log("user is upadted");
+      // console.log("user is upadted");
       const user = res.data;
       // console.log(user);
       setUser(user);
